@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using ANotSoTypicalMarketplace.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +10,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+//Registering a Service
+builder.Services.AddDbContext<Database>(options =>
+        options.UseSqlServer(builder.Configuration["ConnectionStrings:DBStr"]));
+
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -16,7 +26,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseAuthorization();
+
 
 app.MapControllers();
 

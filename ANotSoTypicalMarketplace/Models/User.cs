@@ -26,5 +26,8 @@ namespace ANotSoTypicalMarketplace.Models
 
         [Required]
         public bool IsBanned { get; set; }
+
+        [Required]
+        public List<Product> Products { get; set; }
     }
 }

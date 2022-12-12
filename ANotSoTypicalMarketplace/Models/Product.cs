@@ -5,7 +5,7 @@ namespace ANotSoTypicalMarketplace.Models
     public class Product
     {
         [Required]
-        int Id { get; set; }
+        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
@@ -20,6 +20,7 @@ namespace ANotSoTypicalMarketplace.Models
         public bool CanReturn { get; set; }
         [Required]
         public int CategoryId { get; set; }
+        
 
 
 

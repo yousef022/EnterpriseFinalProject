@@ -5,7 +5,7 @@ namespace ANotSoTypicalMarketplace.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController1 : ControllerBase
+    public class UserController : ControllerBase
     {
     }
 }
