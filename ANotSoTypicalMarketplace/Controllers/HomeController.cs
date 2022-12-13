@@ -108,6 +108,33 @@ namespace ANotSoTypicalMarketplace.Controllers
             }
             return RedirectToAction("Index");
         }
+        
+        
+        public async Task<IActionResult> Checkout(List<Product> products)
+        {
+            DateTime current = DateTime.Now;
+            double total = 0;
+            for (int i = 0; i < products.Count(); i++)
+            {
+                total = total + products[i].Price;
+                products[i].ShippingFee = 2.00;
+
+            }
+            ViewData["totalPrice"] = total;
+            ViewData["Date"] = current;
+
+            return View("Checkout", products);
+        }
+
+        public async Task<IActionResult> CheckoutSuccess()
+        {
+            return View("CheckoutSuccess");
+        }
+
+        public async Task<IActionResult> SellProduct(int id)
+        {
+            return View("SellProduct");
+        }
 
     }
 }
