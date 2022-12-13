@@ -62,6 +62,16 @@ namespace ANotSoTypicalMarketplace.Controllers
             return product;
         }
 
+        //Deleting Product
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            var prod = _context.Products.First(p => p.Id == id);
+            _context.Remove(prod);
+            _context.SaveChanges();
+
+        }
+
 
 
     }
