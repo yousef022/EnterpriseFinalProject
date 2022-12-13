@@ -18,5 +18,7 @@ namespace ANotSoTypicalMarketplace.Models
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<PriceMatch> PriceMatches { get; set; }
+
     }
 }

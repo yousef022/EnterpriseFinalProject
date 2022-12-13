@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANotSoTypicalMarketplace.Migrations
 {
     [DbContext(typeof(Database))]
-    [Migration("20221212191635_Marketplace")]
+    [Migration("20221213035746_Marketplace")]
     partial class Marketplace
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +39,33 @@ namespace ANotSoTypicalMarketplace.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("ANotSoTypicalMarketplace.Models.PriceMatch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PriceMatches");
                 });
 
             modelBuilder.Entity("ANotSoTypicalMarketplace.Models.Product", b =>
