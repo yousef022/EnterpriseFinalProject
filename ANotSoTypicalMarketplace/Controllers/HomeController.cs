@@ -8,6 +8,7 @@ namespace ANotSoTypicalMarketplace.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly Database _context;
         public async Task<IActionResult> Index()
         {
             List<Product> productList = new List<Product>();
@@ -109,31 +110,20 @@ namespace ANotSoTypicalMarketplace.Controllers
             return RedirectToAction("Index");
         }
         
-        
-        public async Task<IActionResult> Checkout(List<Product> products)
+       public async Task<IActionResult> SellProduct(int id)
         {
-            DateTime current = DateTime.Now;
-            double total = 0;
-            for (int i = 0; i < products.Count(); i++)
+            Product product = new Product();
+            var prod = _context.Products.Find(product.Id);
+            using (var httpClient = new HttpClient())
             {
-                total = total + products[i].Price;
-                products[i].ShippingFee = 2.00;
-
+                using (var response = await httpClient.GetAsync("http://localhost:5001/api/product/" + id))
+                {
+                    string apiRes = response.Content.ReadAsStringAsync().Result;
+                    product = JsonConvert.DeserializeObject<Product>(apiRes);
+                }
             }
-            ViewData["totalPrice"] = total;
-            ViewData["Date"] = current;
-
-            return View("Checkout", products);
-        }
-
-        public async Task<IActionResult> CheckoutSuccess()
-        {
-            return View("CheckoutSuccess");
-        }
-
-        public async Task<IActionResult> SellProduct(int id)
-        {
-            return View("SellProduct");
+            prod.Stock -= prod.Stock;
+            return View("SaleConfirm");
         }
 
     }
