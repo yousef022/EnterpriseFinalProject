@@ -20,5 +20,7 @@ namespace ANotSoTypicalMarketplace.Models
 
         public DbSet<PriceMatch> PriceMatches { get; set; }
 
+        public DbSet<Cart> Carts { get; set; }
+
     }
 }

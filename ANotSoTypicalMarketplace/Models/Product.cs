@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ANotSoTypicalMarketplace.Models
 {
@@ -11,6 +12,8 @@ namespace ANotSoTypicalMarketplace.Models
         [Required]
         public string Description { get; set; }
         [Required]
+        public int Stock { get; set; }
+        [Required]
         public double Price { get; set; }
         [Required]
         public double ShippingFee { get; set; }
@@ -20,6 +23,12 @@ namespace ANotSoTypicalMarketplace.Models
         public bool CanReturn { get; set; }
         [Required]
         public int CategoryId { get; set; }
+
+        [ForeignKey("CartId")]
+        public int? CartId { get; set; }
+
+        [ForeignKey("UserId")]
+        public int? UserId { get; set; }
         
 
 

@@ -1,1 +1,29 @@
-﻿
+﻿@model IEnumerable<ANotSoTypicalMarketplace.Models.Product>
+
+<h2>A not so typical marketplace</h2>
+
+
+<table class="table table-bordered table-striped m-2">
+    <thead>
+        <tr>Current items for sale!</tr>
+        <tr>
+            <th>Product ID</th>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Category ID</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Price</td>
+                <td><a class="btn btn-primary" asp-action="PriceMatch" asp-route-id="@item.Id" asp-route-name="@item.Name" asp-route-price="@item.Price">Price match</a></td>
+                <td><a class="btn btn-primary">Add to cart</a></td>
+                
+            </tr>
+        }
+    </tbody>
+</table>

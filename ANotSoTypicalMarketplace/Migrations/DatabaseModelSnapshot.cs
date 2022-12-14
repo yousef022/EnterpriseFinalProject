@@ -22,6 +22,19 @@ namespace ANotSoTypicalMarketplace.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("ANotSoTypicalMarketplace.Models.Cart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Carts");
+                });
+
             modelBuilder.Entity("ANotSoTypicalMarketplace.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -77,6 +90,9 @@ namespace ANotSoTypicalMarketplace.Migrations
                     b.Property<bool>("CanReturn")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("CartId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -101,6 +117,8 @@ namespace ANotSoTypicalMarketplace.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CartId");
 
                     b.HasIndex("UserId");
 
@@ -144,9 +162,18 @@ namespace ANotSoTypicalMarketplace.Migrations
 
             modelBuilder.Entity("ANotSoTypicalMarketplace.Models.Product", b =>
                 {
+                    b.HasOne("ANotSoTypicalMarketplace.Models.Cart", null)
+                        .WithMany("CartItems")
+                        .HasForeignKey("CartId");
+
                     b.HasOne("ANotSoTypicalMarketplace.Models.User", null)
                         .WithMany("Products")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("ANotSoTypicalMarketplace.Models.Cart", b =>
+                {
+                    b.Navigation("CartItems");
                 });
 
             modelBuilder.Entity("ANotSoTypicalMarketplace.Models.User", b =>
