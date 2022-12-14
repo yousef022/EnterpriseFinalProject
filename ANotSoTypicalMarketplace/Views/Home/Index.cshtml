@@ -21,9 +21,9 @@
                 <td>@item.Name</td>
                 <td>@item.Price</td>
                 <td><a class="btn btn-primary" asp-action="PriceMatch" asp-route-id="@item.Id" asp-route-name="@item.Name" asp-route-price="@item.Price">Price match</a></td>
-                <td><a class="btn btn-primary" asp-action="SellProduct" asp-route-id="@item.Id">Buy Now</a></td>
+                <td><a class="btn btn-primary" asp-action="SellProduct" asp-route-id="@item.Id" asp-route-stock="@item.Stock">Buy Now</a></td>
                 <td><a class="btn btn-primary">Add to cart</a></td>
-                
+
             </tr>
         }
     </tbody>

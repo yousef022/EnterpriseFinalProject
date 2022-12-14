@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANotSoTypicalMarketplace.Migrations
 {
     [DbContext(typeof(Database))]
-    [Migration("20221213223547_Marketplace")]
+    [Migration("20221214012538_Marketplace")]
     partial class Marketplace
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -114,6 +114,9 @@ namespace ANotSoTypicalMarketplace.Migrations
 
                     b.Property<double>("ShippingFee")
                         .HasColumnType("float");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");

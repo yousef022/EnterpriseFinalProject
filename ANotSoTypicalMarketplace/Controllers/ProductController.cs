@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ANotSoTypicalMarketplace.Models;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace ANotSoTypicalMarketplace.Controllers
 {
@@ -29,6 +30,7 @@ namespace ANotSoTypicalMarketplace.Controllers
                 Id = product.Id,
                 Name = product.Name,
                 Description = product.Description,
+                Stock = product.Stock,
                 Price = product.Price,
                 ShippingFee= product.ShippingFee,
                 IsUsed= product.IsUsed,
@@ -86,6 +88,9 @@ namespace ANotSoTypicalMarketplace.Controllers
             }
             return NotFound();
         }
+
+
+        
 
 
 
