@@ -114,20 +114,45 @@ namespace ANotSoTypicalMarketplace.Controllers
             return RedirectToAction("Index");
         }
         
-       public async Task<IActionResult> SellProduct(int id)
+      
+        public async Task<IActionResult> SellProduct(int id, int stock)
         {
             Product product = new Product();
-            var prod = _context.Products.Find(product.Id);
+            var newStock = stock - 1;
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync("http://localhost:5001/api/product/" + id))
+                using (var response = await httpClient.GetAsync("http://localhost:5001/api/product" + id))
                 {
                     string apiRes = response.Content.ReadAsStringAsync().Result;
+                    ViewData["id"] = id;
+                    ViewData["stock"] = newStock;
                     product = JsonConvert.DeserializeObject<Product>(apiRes);
+
                 }
             }
-            prod.Stock -= prod.Stock;
-            return View("SaleConfirm");
+            return View("SaleConfirm", product);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SellProduct(int id, Product product)
+        {
+            //var newStock = product.Stock - 1;
+
+            using (var httpClient = new HttpClient())
+            {
+                var request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("http://localhost:5001/api/product/" + id),
+                    Method = new HttpMethod("Patch"),
+                    Content = new StringContent("[{ \"op\": \"replace\", \"path\": \"Stock\",\"value\": \"" + product.Stock + "\"}]",
+                    Encoding.UTF8, "application/json")
+                };
+
+                var response = await httpClient.SendAsync(request);
+
+            }
+
+            return RedirectToAction("Index");
         }
 
         
