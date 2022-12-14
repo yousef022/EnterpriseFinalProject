@@ -71,6 +71,21 @@ namespace ANotSoTypicalMarketplace.Controllers
             _context.SaveChanges();
 
         }
+        
+        //Patching product
+        [HttpPatch("{id}")]
+        public StatusCodeResult Patch(int id, [FromBody] JsonPatchDocument<Product> prodPatch)
+        {
+
+            var prod = (Product)_context.Products.First(p => p.Id == id);
+            if (prod != null)
+            {
+                prodPatch.ApplyTo(prod);
+                _context.SaveChanges();
+                return Ok();
+            }
+            return NotFound();
+        }
 
 
 
