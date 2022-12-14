@@ -9,6 +9,10 @@ namespace ANotSoTypicalMarketplace.Controllers
     public class HomeController : Controller
     {
         private readonly Database _context;
+
+        public static bool userLoggedIn = false;
+
+        static User _user = new User();
         public async Task<IActionResult> Index()
         {
             List<Product> productList = new List<Product>();
@@ -129,9 +133,20 @@ namespace ANotSoTypicalMarketplace.Controllers
         
         public IActionResult LoginFormCheck()
         {
+            if (User.Any(p => p.UserEmail == _user.UserEmail & p.Password == _user.Password))
+            {
+                return View("LoginForm");
+            }
+            else
+            {
+                userLoggedIn = true;
+                return View("Dashboard", _user);
+            }
 
-            return View();
+
         }
+
+
 
     }
 }
