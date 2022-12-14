@@ -9,6 +9,12 @@ namespace ANotSoTypicalMarketplace.Controllers
     public class HomeController : Controller
     {
         private readonly Database _context;
+
+        public HomeController(Database context)
+        {
+            _context = context;
+        }
+
         public async Task<IActionResult> Index()
         {
             List<Product> productList = new List<Product>();
@@ -110,21 +116,8 @@ namespace ANotSoTypicalMarketplace.Controllers
             return RedirectToAction("Index");
         }
         
-       public async Task<IActionResult> SellProduct(int id)
-        {
-            Product product = new Product();
-            var prod = _context.Products.Find(product.Id);
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync("http://localhost:5001/api/product/" + id))
-                {
-                    string apiRes = response.Content.ReadAsStringAsync().Result;
-                    product = JsonConvert.DeserializeObject<Product>(apiRes);
-                }
-            }
-            prod.Stock -= prod.Stock;
-            return View("SaleConfirm");
-        }
+      
+
 
     }
 }

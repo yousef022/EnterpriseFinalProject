@@ -113,6 +113,9 @@ namespace ANotSoTypicalMarketplace.Migrations
                     b.Property<double>("ShippingFee")
                         .HasColumnType("float");
 
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
+
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
