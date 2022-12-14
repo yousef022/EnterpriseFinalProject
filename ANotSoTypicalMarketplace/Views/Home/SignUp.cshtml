@@ -1,0 +1,51 @@
+﻿@model User
+
+<h1>SignUp</h1>
+<br>
+@if (Model != null)
+{
+    <div class="alert alert-danger" asp-validation-summary="All"></div>
+}
+
+<form asp-action="SaveResponse" method="post">
+
+    <div class="form-group">
+        <label asp-for="FirstName">First name:</label>
+        <input asp-for="FirstName" type="text" class="form-control">
+    </div>
+    <br>
+    <div class="form-group">
+        <label asp-for="LastName">Last name:</label>
+        <input asp-for="LastName" type="text" class="form-control">
+    </div>
+    <br>
+    <div class="form-group">
+        <label asp-for="Email">Email:</label>
+        <input asp-for="Email" type="text" class="form-control">
+    </div>
+    <br>
+    <div class="form-group">
+        <label asp-for="PhoneNumber">Phone number:</label>
+        <input asp-for="PhoneNumber" type="text" class="form-control">
+    </div>
+    <br>
+    <div class="form-group">
+        <label asp-for="Password">Password:</label>
+        <input asp-for="Password" type="password" class="form-control">
+    </div>
+    <br>
+    <div class="form-group">
+        <label asp-for="ConfirmPassword">Confirm password:</label>
+        <input asp-for="ConfirmPassword" type="password" class="form-control">
+    </div>
+    <br>
+    <div class="button-signup">
+        <button type="submit" class="btn btn-primary">SignUp</button>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EmailExist">Do you want to</label>
+        <a asp-action="LoginForm">Login?</a>
+
+    </div>
+</form>

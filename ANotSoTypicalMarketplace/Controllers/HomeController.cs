@@ -10,11 +10,9 @@ namespace ANotSoTypicalMarketplace.Controllers
     {
         private readonly Database _context;
 
-        public HomeController(Database context)
-        {
-            _context = context;
-        }
+        public static bool userLoggedIn = false;
 
+        static User _user = new User();
         public async Task<IActionResult> Index()
         {
             List<Product> productList = new List<Product>();
@@ -117,6 +115,62 @@ namespace ANotSoTypicalMarketplace.Controllers
         }
         
       
+        public async Task<IActionResult> SellProduct(int id, int stock)
+        {
+            Product product = new Product();
+            var newStock = stock - 1;
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync("http://localhost:5001/api/product" + id))
+                {
+                    string apiRes = response.Content.ReadAsStringAsync().Result;
+                    ViewData["id"] = id;
+                    ViewData["stock"] = newStock;
+                    product = JsonConvert.DeserializeObject<Product>(apiRes);
+
+                }
+            }
+            return View("SaleConfirm", product);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SellProduct(int id, Product product)
+        {
+            //var newStock = product.Stock - 1;
+
+            using (var httpClient = new HttpClient())
+            {
+                var request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("http://localhost:5001/api/product/" + id),
+                    Method = new HttpMethod("Patch"),
+                    Content = new StringContent("[{ \"op\": \"replace\", \"path\": \"Stock\",\"value\": \"" + product.Stock + "\"}]",
+                    Encoding.UTF8, "application/json")
+                };
+
+                var response = await httpClient.SendAsync(request);
+
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        
+        public IActionResult LoginFormCheck()
+        {
+            if (User.Any(p => p.UserEmail == _user.UserEmail & p.Password == _user.Password))
+            {
+                return View("LoginForm");
+            }
+            else
+            {
+                userLoggedIn = true;
+                return View("Dashboard", _user);
+            }
+
+
+        }
+
 
 
     }
