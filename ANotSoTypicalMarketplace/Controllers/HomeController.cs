@@ -126,5 +126,12 @@ namespace ANotSoTypicalMarketplace.Controllers
             return View("SaleConfirm");
         }
 
+        
+        public IActionResult LoginFormCheck()
+        {
+
+            return View();
+        }
+
     }
 }
