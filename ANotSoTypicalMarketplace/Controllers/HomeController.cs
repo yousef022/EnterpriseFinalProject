@@ -163,18 +163,17 @@ namespace ANotSoTypicalMarketplace.Controllers
         }
 
         
-        public IActionResult LoginFormCheck()
+        public IActionResult LoginInfoCheck()
         {
 
             if (_dbContext.Users.Any(p => p.UserEmail == _user.UserEmail & p.Password == _user.Password))
             {
-
-                return View("LoginForm", _user);
+                userLoggedIn = true;
+                return View("Dashboard", _user);
             }
             else
             {
-                userLoggedIn = true;
-                return View("Dashboard", _user);
+                return View("LoginForm", _user);
             }
 
 
