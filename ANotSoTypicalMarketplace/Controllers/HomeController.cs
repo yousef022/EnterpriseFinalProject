@@ -1,5 +1,6 @@
 ﻿using ANotSoTypicalMarketplace.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text;
@@ -11,8 +12,14 @@ namespace ANotSoTypicalMarketplace.Controllers
         private readonly Database _context;
 
         public static bool userLoggedIn = false;
-
         static User _user = new User();
+
+        public HomeController(Database dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        Database _dbContext;
         public async Task<IActionResult> Index()
         {
             List<Product> productList = new List<Product>();
@@ -133,9 +140,11 @@ namespace ANotSoTypicalMarketplace.Controllers
         
         public IActionResult LoginFormCheck()
         {
-            if (User.Any(p => p.UserEmail == _user.UserEmail & p.Password == _user.Password))
+
+            if (_dbContext.Users.Any(p => p.UserEmail == _user.UserEmail & p.Password == _user.Password))
             {
-                return View("LoginForm");
+
+                return View("LoginForm", _user);
             }
             else
             {
