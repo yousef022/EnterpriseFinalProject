@@ -39,6 +39,11 @@ namespace ANotSoTypicalMarketplace.Controllers
             }
             return View(productList);
         }
+        
+        public IActionResult AddListingPage()
+        {
+            return View("AddListing");
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddProduct(Product product)
