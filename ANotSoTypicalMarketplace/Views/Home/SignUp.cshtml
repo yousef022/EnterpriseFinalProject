@@ -10,23 +10,18 @@
 <form asp-action="SaveResponse" method="post">
 
     <div class="form-group">
-        <label asp-for="FirstName">First name:</label>
-        <input asp-for="FirstName" type="text" class="form-control">
+        <label asp-for="UserName">Username:</label>
+        <input asp-for="UserName" type="text" class="form-control">
     </div>
     <br>
     <div class="form-group">
-        <label asp-for="LastName">Last name:</label>
-        <input asp-for="LastName" type="text" class="form-control">
+        <label asp-for="FullName">Full name:</label>
+        <input asp-for="FullName" type="text" class="form-control">
     </div>
     <br>
     <div class="form-group">
-        <label asp-for="Email">Email:</label>
-        <input asp-for="Email" type="text" class="form-control">
-    </div>
-    <br>
-    <div class="form-group">
-        <label asp-for="PhoneNumber">Phone number:</label>
-        <input asp-for="PhoneNumber" type="text" class="form-control">
+        <label asp-for="UserEmail">Email:</label>
+        <input asp-for="UserEmail" type="text" class="form-control">
     </div>
     <br>
     <div class="form-group">
@@ -35,8 +30,8 @@
     </div>
     <br>
     <div class="form-group">
-        <label asp-for="ConfirmPassword">Confirm password:</label>
-        <input asp-for="ConfirmPassword" type="password" class="form-control">
+        <label asp-for="PhoneNumber">Phone number:</label>
+        <input asp-for="PhoneNumber" type="text" class="form-control">
     </div>
     <br>
     <div class="button-signup">
@@ -44,8 +39,8 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="EmailExist">Do you want to</label>
-        <a asp-action="LoginForm">Login?</a>
+        <label asp-for="UserEmail">Do you want to</label>
+        <a asp-action="Login">Login?</a>
 
     </div>
 </form>

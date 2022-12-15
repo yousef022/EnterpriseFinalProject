@@ -173,13 +173,63 @@ namespace ANotSoTypicalMarketplace.Controllers
             }
             else
             {
-                return View("LoginForm", _user);
+                return View("Login", _user);
             }
 
-
+        
         }
 
+        [HttpGet]
+        public IActionResult Dashboard()
+        {
+            if (userLoggedIn == true)
+            {
+                return View(_user);
+            }
 
+            else
+            {
+                return RedirectToAction("Login");
+            }
+        }
+
+        public IActionResult EmailExist()
+        {
+            return View("EmailExist");
+        }
+
+        [HttpPost]
+        public IActionResult SaveResponse(User user)
+        {
+            _user = user;
+
+            if (!ModelState.IsValid)
+            {
+                return View("SignUp", _user);
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (_dbContext.Users.Any(p => p.UserEmail == _user.UserEmail))
+                {
+                    return View("EmailExist");
+                }
+                //todo: save the response
+               // User.AddUser(_user); //stuck here
+                return View("Login", _user);
+            }
+
+            else
+            {
+                return View("SignUp");
+            }
+        }
+
+        //stuck on adding the user
+        public static void AddUser(User user)
+        {
+            //User.Add(user);
+        }
 
     }
 }
