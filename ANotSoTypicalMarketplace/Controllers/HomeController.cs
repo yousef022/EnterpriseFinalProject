@@ -1,5 +1,6 @@
 ﻿using ANotSoTypicalMarketplace.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text;
@@ -11,8 +12,14 @@ namespace ANotSoTypicalMarketplace.Controllers
         private readonly Database _context;
 
         public static bool userLoggedIn = false;
-
         static User _user = new User();
+
+        public HomeController(Database dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        Database _dbContext;
         public async Task<IActionResult> Index()
         {
             List<Product> productList = new List<Product>();
@@ -31,11 +38,11 @@ namespace ANotSoTypicalMarketplace.Controllers
             }
             return View(productList);
         }
-
-        public IActionResult GoToListing()=> View();
-
-        public IActionResult GoToCart()=> View("Cart");
-
+        
+        public IActionResult AddListingPage()
+        {
+            return View("AddListing");
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddProduct(Product product)
@@ -321,23 +328,74 @@ namespace ANotSoTypicalMarketplace.Controllers
             return RedirectToAction("Index");
         }
 
-
-        /*public IActionResult LoginFormCheck()
+        
+        public IActionResult LoginInfoCheck()
         {
-            if (User.Any(p => p.UserEmail == _user.UserEmail & p.Password == _user.Password))
-            {
-                return View("LoginForm");
-            }
-            else
+
+            if (_dbContext.Users.Any(p => p.UserEmail == _user.UserEmail & p.Password == _user.Password))
             {
                 userLoggedIn = true;
                 return View("Dashboard", _user);
             }
+            else
+            {
+                return View("Login", _user);
+            }
 
+        
+        }
 
-        }*/
+        [HttpGet]
+        public IActionResult Dashboard()
+        {
+            if (userLoggedIn == true)
+            {
+                return View(_user);
+            }
 
+            else
+            {
+                return RedirectToAction("Login");
+            }
+        }
 
+        public IActionResult EmailExist()
+        {
+            return View("EmailExist");
+        }
+
+        [HttpPost]
+        public IActionResult SaveResponse(User user)
+        {
+            _user = user;
+
+            if (!ModelState.IsValid)
+            {
+                return View("SignUp", _user);
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (_dbContext.Users.Any(p => p.UserEmail == _user.UserEmail))
+                {
+                    return View("EmailExist");
+                }
+                //todo: save the response
+               // User.AddUser(_user); //stuck here
+                return View("Login", _user);
+            }
+
+            else
+            {
+                return View("SignUp");
+            }
+        }
+
+        //stuck on adding the user
+        public static void AddUser(User user)
+        {
+            //User.Add(user);
+        }
 
     }
 }

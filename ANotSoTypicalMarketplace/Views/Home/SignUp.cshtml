@@ -10,10 +10,15 @@
 <form asp-action="SaveResponse" method="post">
 
     <div class="form-group">
+        <label asp-for="UserName">Username:</label>
+        <input asp-for="UserName" type="text" class="form-control">
+    </div>
+    
+    <br>
+    <div class="form-group">
         <label asp-for="FullName">Full name:</label>
         <input asp-for="FullName" type="text" class="form-control">
     </div>
-    
     <br>
     <div class="form-group">
         <label asp-for="UserEmail">Email:</label>
@@ -21,19 +26,22 @@
     </div>
     <br>
     <div class="form-group">
-        <label asp-for="PhoneNumber">Phone number:</label>
-        <input asp-for="PhoneNumber" type="text" class="form-control">
-    </div>
-    <br>
-    <div class="form-group">
         <label asp-for="Password">Password:</label>
         <input asp-for="Password" type="password" class="form-control">
     </div>
-   
+    <br>
+    <div class="form-group">
+        <label asp-for="PhoneNumber">Phone number:</label>
+        <input asp-for="PhoneNumber" type="text" class="form-control">
+    </div>
     <br>
     <div class="button-signup">
         <button type="submit" class="btn btn-primary">SignUp</button>
     </div>
 
-   
+    <div class="form-group">
+        <label asp-for="UserEmail">Do you want to</label>
+        <a asp-action="Login">Login?</a>
+
+    </div>
 </form>
