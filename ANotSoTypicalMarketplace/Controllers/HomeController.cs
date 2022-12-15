@@ -27,11 +27,15 @@ namespace ANotSoTypicalMarketplace.Controllers
 
                     productList = JsonConvert.
                         DeserializeObject<List<Product>>(apiResponse);
-
                 }
             }
             return View(productList);
         }
+
+        public IActionResult GoToListing()=> View();
+
+        public IActionResult GoToCart()=> View("Cart");
+
 
         [HttpPost]
         public async Task<IActionResult> AddProduct(Product product)
@@ -118,14 +122,15 @@ namespace ANotSoTypicalMarketplace.Controllers
         public async Task<IActionResult> SellProduct(int id, int stock)
         {
             Product product = new Product();
-            var newStock = stock - 1;
+            //var newStock = stock - 1;
             using (var httpClient = new HttpClient())
             {
                 using (var response = await httpClient.GetAsync("http://localhost:5001/api/product" + id))
                 {
                     string apiRes = response.Content.ReadAsStringAsync().Result;
                     ViewData["id"] = id;
-                    ViewData["stock"] = newStock;
+                    ViewData["stock"] = stock;
+                    ViewData["maxStock"] = stock;
                     product = JsonConvert.DeserializeObject<Product>(apiRes);
 
                 }
@@ -136,7 +141,6 @@ namespace ANotSoTypicalMarketplace.Controllers
         [HttpPost]
         public async Task<IActionResult> SellProduct(int id, Product product)
         {
-            //var newStock = product.Stock - 1;
 
             using (var httpClient = new HttpClient())
             {
@@ -155,8 +159,170 @@ namespace ANotSoTypicalMarketplace.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> Cart()
+        {
+            List<Cart> cartList = new List<Cart>();
+
+            using (HttpClient httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync("http://localhost:5001/api/cart"))
+                {
+                    string apiResponse = await
+                                    response.Content.ReadAsStringAsync();
+
+                    cartList = JsonConvert.
+                        DeserializeObject<List<Cart>>(apiResponse);
+                }
+            }
+            return View(cartList);
+        }
+
         
-        public IActionResult LoginFormCheck()
+        public async Task<IActionResult> AddToCart(int productId)
+        {
+            Cart cartList = new Cart();
+            using(HttpClient httpClient = new HttpClient())
+            {
+                var response = await httpClient.PostAsync("http://localhost:5001/api/cart/" + productId, null);
+               
+            }
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> SellProductFromCart(int id, int stock)
+        {
+            Product product = new Product();
+            //var newStock = stock - 1;
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync("http://localhost:5001/api/product" + id))
+                {
+                    string apiRes = response.Content.ReadAsStringAsync().Result;
+                    ViewData["id"] = id;
+                    ViewData["stock"] = stock;
+                    
+                    product = JsonConvert.DeserializeObject<Product>(apiRes);
+
+                }
+            }
+            return View("SaleConfirmCart", product);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SellProductFromCart(int id, Product product)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("http://localhost:5001/api/product/" + id),
+                    Method = new HttpMethod("Patch"),
+                    Content = new StringContent("[{ \"op\": \"replace\", \"path\": \"Stock\",\"value\": \"" + product.Stock + "\"}]",
+                    Encoding.UTF8, "application/json")
+                };
+
+                var response = await httpClient.SendAsync(request);
+
+            }
+
+            await DeleteFromCart(id);
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> DeleteFromCart(int id)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.DeleteAsync("http://localhost:5001/api/cart/" + id.ToString()))
+                {
+                    string apiRes = await response.Content.ReadAsStringAsync();
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> PriceMatch(int id, string name, double price)
+        {
+
+            List<PriceMatch> priceMatchList = new List<PriceMatch>();
+            using (HttpClient httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync(
+                    "http://localhost:5001/api/pricematch"))
+                {
+                    string apiResponse = await
+                                    response.Content.ReadAsStringAsync();
+
+                    priceMatchList = JsonConvert.
+                        DeserializeObject<List<PriceMatch>>(apiResponse);
+                }
+            }
+
+            var pmName = priceMatchList.Find(n => n.Name == name);
+
+            var pmPrice = pmName.Price;
+            
+
+            
+
+
+            //var priceMatchProductName = _context.PriceMatches.Find(name);
+            if (pmPrice < price)
+            {
+                var newPrice = pmPrice;
+                ViewData["prodid"] = id;
+                ViewData["prodprice"] = newPrice;
+                ViewData["prodname"] = name;
+            }
+            else if (pmPrice >= price)
+            {
+                ViewData["prodid"] = id;
+                ViewData["prodprice"] = price;
+                ViewData["prodname"] = name;
+            }
+
+           
+           
+            return View("PriceMatch");
+        }
+
+        /* List<Product> productList = new List<Product>();
+
+            using (HttpClient httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync(
+                    "http://localhost:5001/api/product"))
+                {
+                    string apiResponse = await
+                                    response.Content.ReadAsStringAsync();
+
+                    productList = JsonConvert.
+                        DeserializeObject<List<Product>>(apiResponse);
+                }
+            }*/
+        [HttpPost]
+        public async Task<IActionResult> PriceMatch(int id, Product product)
+        {
+           
+            using (var httpClient = new HttpClient())
+            {
+                var request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("http://localhost:5001/api/product/" + id),
+                    Method = new HttpMethod("Patch"),
+                    Content = new StringContent("[{ \"op\": \"replace\", \"path\": \"Price\",\"value\": \"" + product.Price + "\"}]",
+                    Encoding.UTF8, "application/json")
+                };
+
+                var response = await httpClient.SendAsync(request);
+
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
+        /*public IActionResult LoginFormCheck()
         {
             if (User.Any(p => p.UserEmail == _user.UserEmail & p.Password == _user.Password))
             {
@@ -169,7 +335,7 @@ namespace ANotSoTypicalMarketplace.Controllers
             }
 
 
-        }
+        }*/
 
 
 

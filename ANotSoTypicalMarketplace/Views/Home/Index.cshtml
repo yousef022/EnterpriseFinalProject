@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<ANotSoTypicalMarketplace.Models.Product>
 
-<h2>A not so typical marketplace</h2>
+<h2>>Current items for sale!</h2>
 
+<a class="btn btn-primary" asp-action="GoToListing">Create a new listing</a>
 
 <table class="table table-bordered table-striped m-2">
     <thead>
-        <tr>Current items for sale!</tr>
         <tr>
             <th>Product ID</th>
             <th>Product Name</th>
@@ -20,9 +20,29 @@
                 <td>@item.Id</td>
                 <td>@item.Name</td>
                 <td>@item.Price</td>
-                <td><a class="btn btn-primary" asp-action="PriceMatch" asp-route-id="@item.Id" asp-route-name="@item.Name" asp-route-price="@item.Price">Price match</a></td>
-                <td><a class="btn btn-primary" asp-action="SellProduct" asp-route-id="@item.Id" asp-route-stock="@item.Stock">Buy Now</a></td>
-                <td><a class="btn btn-primary">Add to cart</a></td>
+                <td>@item.CategoryId</td>
+                <td><a class="btn btn-primary" asp-action="PriceMatch" asp-route-id="@item.Id" asp-route-name="@item.Name" asp-route-price="@item.Price">
+                        <span class="material-symbols-outlined">
+                            sell
+                        </span>
+                        Price match
+                    </a>
+                </td>
+                <td><a class="btn btn-primary" asp-action="SellProduct" asp-route-id="@item.Id" asp-route-stock="@item.Stock">
+                        <span class="material-symbols-outlined">
+                            attach_money
+                        </span>
+                        Buy Now
+                    </a>
+                </td>
+                <td><a class="btn btn-primary" asp-action="AddToCart" asp-route-productId="@item.Id">
+                        <span class="material-symbols-outlined">
+                            add_shopping_cart
+                        </span>
+                        Add To Cart
+                        </a>
+                </td>
+                
 
             </tr>
         }

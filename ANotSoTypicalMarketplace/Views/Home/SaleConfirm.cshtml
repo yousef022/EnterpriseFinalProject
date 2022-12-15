@@ -3,7 +3,7 @@
 
 
 <h2>Confirm Purchase</h2>
-<form asp-action="SellProduct" method="Post">
+<form asp-action="SellProduct" method="Post" runat="server" onsubmit="checkSubmit()">
 
 
     <div class="form-group">
@@ -13,11 +13,29 @@
 
     <div class="form-group">
         <label asp-for="Stock">Stock: </label>
-        <input class="form-control" asp-for="Stock" name="Stock" value="@ViewData["stock"]" readonly />
+        <input id="pstock" class="form-control" asp-for="Stock" name="Stock" value="@ViewData["stock"]" readonly />
     </div>
 
+    <div class="form-group">
+        <label>Quantity: </label>
+        <input id="quantity" class="form-control" type="number" oninput="myFunction()" max="@ViewData["maxStock"]"/>
+    </div>
 
     <div class="text-center panel-body">
         <button type="submit" class=" btn btn-primary">Confirm Purchase</button>
     </div>
 </form>
+<script runat="server">
+    function myFunction() {
+       
+        var quant = document.getElementById("quantity").value;
+        document.getElementById("pstock").value = @ViewData["stock"] - quant;
+        
+    }
+
+    function submission() {
+        if (document.getElementById("pstock").value <  document.getElementById("quantity").value) {
+            alert("You have selected more than whats available in stock, please enter a lower amount.");
+        }
+    }
+</script>

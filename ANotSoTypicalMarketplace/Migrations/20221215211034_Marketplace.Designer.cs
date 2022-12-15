@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANotSoTypicalMarketplace.Migrations
 {
     [DbContext(typeof(Database))]
-    [Migration("20221214012538_Marketplace")]
+    [Migration("20221215211034_Marketplace")]
     partial class Marketplace
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,6 +31,9 @@ namespace ANotSoTypicalMarketplace.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool>("Added")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
