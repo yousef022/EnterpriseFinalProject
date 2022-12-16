@@ -10,16 +10,16 @@ namespace ANotSoTypicalMarketplace.Controllers
     public class HomeController : Controller
     {
         private readonly Database _context;
+        private static bool _isLoggedIn;
+        private bool IsLoggedIn { get => _isLoggedIn; set => _isLoggedIn = value; }
+        //static User _user = new User();
 
-        public static bool userLoggedIn = false;
-        static User _user = new User();
-
-        public HomeController(Database dbContext)
+        public HomeController(Database context)
         {
-            _dbContext = dbContext;
+            _context = context;
         }
 
-        Database _dbContext;
+        
         public async Task<IActionResult> Index()
         {
             List<Product> productList = new List<Product>();
@@ -37,6 +37,12 @@ namespace ANotSoTypicalMarketplace.Controllers
                 }
             }
             return View(productList);
+        }
+
+
+        public IActionResult SignUp()
+        {
+            return View();
         }
         
         public IActionResult AddListingPage()
@@ -269,11 +275,6 @@ namespace ANotSoTypicalMarketplace.Controllers
 
             var pmPrice = pmName.Price;
             
-
-            
-
-
-            //var priceMatchProductName = _context.PriceMatches.Find(name);
             if (pmPrice < price)
             {
                 var newPrice = pmPrice;
@@ -293,21 +294,8 @@ namespace ANotSoTypicalMarketplace.Controllers
             return View("PriceMatch");
         }
 
-        /* List<Product> productList = new List<Product>();
-
-            using (HttpClient httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync(
-                    "http://localhost:5001/api/product"))
-                {
-                    string apiResponse = await
-                                    response.Content.ReadAsStringAsync();
-
-                    productList = JsonConvert.
-                        DeserializeObject<List<Product>>(apiResponse);
-                }
-            }*/
-        [HttpPost]
+       
+        
         public async Task<IActionResult> PriceMatch(int id, Product product)
         {
            
@@ -328,24 +316,78 @@ namespace ANotSoTypicalMarketplace.Controllers
             return RedirectToAction("Index");
         }
 
-        
-        public IActionResult LoginInfoCheck()
+        [HttpPost]
+        public async Task<IActionResult> Login(string email, string password)
         {
-
-            if (_dbContext.Users.Any(p => p.UserEmail == _user.UserEmail & p.Password == _user.Password))
+            List<User> userList = new List<User>();
+            using (HttpClient httpClient = new HttpClient())
             {
-                userLoggedIn = true;
-                return View("Dashboard", _user);
+                using (var response = await httpClient.GetAsync(
+                    "http://localhost:5001/api/user"))
+                {
+                    string apiResponse = await
+                                   response.Content.ReadAsStringAsync();
+
+                    userList = JsonConvert.
+                        DeserializeObject<List<User>>(apiResponse);
+                }
+            }
+
+            if (userList.Any(u => u.UserEmail == email))
+            {
+                if (userList.Any(u => u.Password == password))
+                {
+                    var e = userList.Find(u => u.UserEmail == email);
+                    IsLoggedIn = true;
+                    ViewData["UserName"] = e.UserName;
+                    return View("Index");
+                }
+                else
+                {
+                    return View();
+                }
             }
             else
             {
-                return View("Login", _user);
+                return View();
             }
 
-        
+
+            
+
         }
 
-        [HttpGet]
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(User user)
+        {
+            User userList= new User();
+            using (HttpClient httpClient = new HttpClient())
+            {
+                StringContent content = new StringContent(JsonConvert.
+                   SerializeObject(user), Encoding.UTF8, "application/json");
+                using (var response = await httpClient.PostAsync(
+                    "http://localhost:5001/api/user", content))
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        string apiResponse = await
+                                    response.Content.ReadAsStringAsync();
+                        userList = JsonConvert.
+                       DeserializeObject<User>(apiResponse);
+                    }
+                    else
+                    {
+                        ViewBag.StatusCode = response.StatusCode;
+                    }
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
+        
+
+        /*[HttpGet]
         public IActionResult Dashboard()
         {
             if (userLoggedIn == true)
@@ -357,45 +399,13 @@ namespace ANotSoTypicalMarketplace.Controllers
             {
                 return RedirectToAction("Login");
             }
-        }
+        }*/
 
-        public IActionResult EmailExist()
-        {
-            return View("EmailExist");
-        }
 
-        [HttpPost]
-        public IActionResult SaveResponse(User user)
-        {
-            _user = user;
 
-            if (!ModelState.IsValid)
-            {
-                return View("SignUp", _user);
-            }
 
-            if (ModelState.IsValid)
-            {
-                if (_dbContext.Users.Any(p => p.UserEmail == _user.UserEmail))
-                {
-                    return View("EmailExist");
-                }
-                //todo: save the response
-               // User.AddUser(_user); //stuck here
-                return View("Login", _user);
-            }
 
-            else
-            {
-                return View("SignUp");
-            }
-        }
 
-        //stuck on adding the user
-        public static void AddUser(User user)
-        {
-            //User.Add(user);
-        }
 
     }
 }
