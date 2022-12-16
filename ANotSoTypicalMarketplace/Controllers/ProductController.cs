@@ -53,6 +53,7 @@ namespace ANotSoTypicalMarketplace.Controllers
 
             prod.Name = product.Name;
             prod.Description = product.Description;
+            prod.Stock = product.Stock;
             prod.Price = product.Price;
             prod.ShippingFee= product.ShippingFee;
             prod.IsUsed = product.IsUsed;
