@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿//Author: Yousef Osman
+using Microsoft.EntityFrameworkCore;
 
 namespace ANotSoTypicalMarketplace.Models
 {

@@ -1,4 +1,4 @@
-﻿//using ANotSoTypicalMarketplace.Migrations;
+﻿//Author: Tyler Makris
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ANotSoTypicalMarketplace.Models;

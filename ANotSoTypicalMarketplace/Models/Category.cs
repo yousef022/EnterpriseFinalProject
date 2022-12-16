@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿//Author: Tyler Makris
+
+using System.ComponentModel.DataAnnotations;
 
 namespace ANotSoTypicalMarketplace.Models
 {

@@ -12,7 +12,13 @@
 
     <div class="form-group">
         <label asp-for="Stock">Stock: </label>
-        <input class="form-control" asp-for="Stock" name="Stock" value="@ViewData["stock"] - " readonly />
+        <input class="form-control" asp-for="Stock" name="Stock" value="@ViewData["stock"]" readonly />
+    </div>
+
+
+    <div class="form-group">
+        <label>Quantity: </label>
+        <input id="quantity" class="form-control" type="number" oninput="myFunction()" max="@ViewData["maxStockCart"]" />
     </div>
 
     <div class="text-center panel-body">

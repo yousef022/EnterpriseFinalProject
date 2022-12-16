@@ -44,6 +44,11 @@ namespace ANotSoTypicalMarketplace.Controllers
         {
             return View();
         }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
         
         public IActionResult AddListingPage()
         {
@@ -213,7 +218,8 @@ namespace ANotSoTypicalMarketplace.Controllers
                     string apiRes = response.Content.ReadAsStringAsync().Result;
                     ViewData["id"] = id;
                     ViewData["stock"] = stock;
-                    
+                    ViewData["maxStockCart"] = stock;
+
                     product = JsonConvert.DeserializeObject<Product>(apiRes);
 
                 }
@@ -387,19 +393,7 @@ namespace ANotSoTypicalMarketplace.Controllers
 
         
 
-        /*[HttpGet]
-        public IActionResult Dashboard()
-        {
-            if (userLoggedIn == true)
-            {
-                return View(_user);
-            }
-
-            else
-            {
-                return RedirectToAction("Login");
-            }
-        }*/
+       
 
 
 

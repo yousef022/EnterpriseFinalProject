@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿//Author: Ammar Khan
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ANotSoTypicalMarketplace.Models;
 using Microsoft.AspNetCore.JsonPatch;
@@ -12,6 +13,11 @@ namespace ANotSoTypicalMarketplace.Controllers
     {
         private readonly Database _context;
 
+        public UserController(Database context)
+        {
+            _context = context;
+        }
+
         [HttpGet]
         public IEnumerable<User> Get() => _context.Users.Include(x => x.Products).ToList();
 
@@ -20,13 +26,13 @@ namespace ANotSoTypicalMarketplace.Controllers
         {
             var u = new User
             {
-                Id = user.Id,
+                Id = 1,
                 UserName = user.UserName,
                 FullName = user.FullName,
                 UserEmail = user.UserEmail,
                 Password = user.Password,
                 PhoneNumber = user.PhoneNumber,
-                IsBanned= user.IsBanned,
+                IsBanned= false,
             };
 
             _context.Users.Add(u);

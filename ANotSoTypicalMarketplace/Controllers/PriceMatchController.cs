@@ -1,4 +1,6 @@
-﻿using ANotSoTypicalMarketplace.Models;
+﻿//Author: Yousef Osman
+
+using ANotSoTypicalMarketplace.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
