@@ -300,8 +300,8 @@ namespace ANotSoTypicalMarketplace.Controllers
             return View("PriceMatch");
         }
 
-       
-        
+
+        [HttpPost]
         public async Task<IActionResult> PriceMatch(int id, Product product)
         {
            
