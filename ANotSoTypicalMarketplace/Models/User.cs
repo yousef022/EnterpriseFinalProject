@@ -1,11 +1,12 @@
-﻿//Author: Ammar Khan
-
+﻿
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ANotSoTypicalMarketplace.Models
 {
     public class User
     {
+        [Key]
         [Required]
         public int Id { get; set; }
 
@@ -24,12 +25,13 @@ namespace ANotSoTypicalMarketplace.Models
 
         [Required(ErrorMessage = "Phone number should not be empty")]
         [RegularExpression(@"\d{3}-\d{3}-\d{4}", ErrorMessage = "Phone number is in wrong format")]
-        public int PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
         [Required]
         public bool IsBanned { get; set; }
 
-        [Required]
-        public List<Product> Products { get; set; }
+        
+        [AllowNull]
+        public List<Product>? Products { get; set; }
     }
 }

@@ -19,14 +19,17 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Cart">
-                                <span class="material-symbols-outlined">
-                                    shopping_cart
-                                </span>
-                                Cart
-                            </a>
-                        </li>
+                        @if (ViewData["ShowCart"] as bool? ?? false)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Cart">
+                                    <span class="material-symbols-outlined">
+                                        shopping_cart
+                                    </span>
+                                    Cart
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -38,11 +41,12 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer fixed-bottom">
         <div class="container">
-            &copy; 2022 - Group 6 ANotSoTypicalMarketplace
+            <span class="text-muted"> &copy; 2022 - Group 6 ANotSoTypicalMarketplace</span>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

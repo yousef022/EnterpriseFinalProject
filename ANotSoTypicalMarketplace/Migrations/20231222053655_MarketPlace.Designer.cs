@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ANotSoTypicalMarketplace.Migrations
 {
     [DbContext(typeof(Database))]
-    [Migration("20221215211034_Marketplace")]
-    partial class Marketplace
+    [Migration("20231222053655_MarketPlace")]
+    partial class MarketPlace
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -152,8 +152,9 @@ namespace ANotSoTypicalMarketplace.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserEmail")
                         .IsRequired()

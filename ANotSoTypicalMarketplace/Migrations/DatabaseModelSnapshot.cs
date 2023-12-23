@@ -20,7 +20,7 @@ namespace ANotSoTypicalMarketplace.Migrations
                 .HasAnnotation("ProductVersion", "6.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            //SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("ANotSoTypicalMarketplace.Models.Cart", b =>
                 {
@@ -28,7 +28,7 @@ namespace ANotSoTypicalMarketplace.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                   //SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<bool>("Added")
                         .HasColumnType("bit");
@@ -44,7 +44,7 @@ namespace ANotSoTypicalMarketplace.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    //SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -61,7 +61,7 @@ namespace ANotSoTypicalMarketplace.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    //SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -88,7 +88,7 @@ namespace ANotSoTypicalMarketplace.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    //SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<bool>("CanReturn")
                         .HasColumnType("bit");
@@ -137,7 +137,7 @@ namespace ANotSoTypicalMarketplace.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    //SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -150,8 +150,9 @@ namespace ANotSoTypicalMarketplace.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserEmail")
                         .IsRequired()

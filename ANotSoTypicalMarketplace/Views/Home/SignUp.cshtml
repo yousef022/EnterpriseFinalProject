@@ -11,7 +11,7 @@
 
     <div class="form-group">
         <label asp-for="UserName">Username:</label>
-        <input asp-for="UserName" type="text" class="form-control">
+        <input asp-for="UserName" type="text" class="form-control" placeholder="name@example.com">
     </div>
     
     <br>
@@ -28,11 +28,14 @@
     <div class="form-group">
         <label asp-for="Password">Password:</label>
         <input asp-for="Password" type="password" class="form-control">
+        <div id="passwordHelpBlock" class="form-text">
+            Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+        </div>
     </div>
     <br>
     <div class="form-group">
         <label asp-for="PhoneNumber">Phone number:</label>
-        <input asp-for="PhoneNumber" type="text" class="form-control">
+        <input asp-for="PhoneNumber" type="text" class="form-control" placeholder="123-456-7890">
     </div>
     <br>
     <div class="button-signup">
@@ -43,6 +46,6 @@
 </form>
 <div class="form-group">
     <label asp-for="UserEmail">Do you want to</label>
-    <a asp-action="Login">Login?</a>
+    <a asp-action="GoToLogin">Login?</a>
 
 </div>

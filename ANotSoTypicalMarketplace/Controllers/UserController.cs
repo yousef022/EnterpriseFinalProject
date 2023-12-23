@@ -18,28 +18,57 @@ namespace ANotSoTypicalMarketplace.Controllers
             _context = context;
         }
 
+       
+
+
         [HttpGet]
         public IEnumerable<User> Get() => _context.Users.Include(x => x.Products).ToList();
 
-        [HttpPost]
+        /*[HttpPost]
         public User Post([FromBody] User user)
         {
             var u = new User
             {
-                Id = 1,
+                //Id = 1,
                 UserName = user.UserName,
                 FullName = user.FullName,
                 UserEmail = user.UserEmail,
                 Password = user.Password,
                 PhoneNumber = user.PhoneNumber,
                 IsBanned= false,
+                Products = null
             };
 
             _context.Users.Add(u);
+
             _context.SaveChanges();
 
             return user;
+        }*/
+
+        [HttpPost]
+        public ActionResult<User> Post([FromBody] User user)
+        {
+            // No need to set Id; it will be generated automatically
+
+            user.IsBanned = false;
+            user.Products = null; 
+            _context.Users.Add(user);
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error adding data to the database: {ex.Message}");
+            }
+
+            return Ok(user); // Now user contains the auto-generated Id
         }
+
+
 
         [HttpPut]
         public User Put([FromBody] User user)

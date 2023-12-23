@@ -13,6 +13,13 @@ namespace ANotSoTypicalMarketplace.Models
         public Database(DbContextOptions<Database> contextOptions)
             : base(contextOptions) { }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .Property(u => u.Id)
+                .ValueGeneratedOnAdd();
+        }
+
         //Datastructure
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }

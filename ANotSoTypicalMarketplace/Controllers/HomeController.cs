@@ -22,6 +22,8 @@ namespace ANotSoTypicalMarketplace.Controllers
         
         public async Task<IActionResult> Index()
         {
+            ViewData["ShowCart"] = true; // Show cart on the home page
+
             List<Product> productList = new List<Product>();
 
             using (HttpClient httpClient = new HttpClient())
@@ -39,15 +41,15 @@ namespace ANotSoTypicalMarketplace.Controllers
             return View(productList);
         }
 
-
+        
         public IActionResult SignUp()
         {
             return View();
         }
 
-        public IActionResult Login()
+        public IActionResult GoToLogin()
         {
-            return View();
+            return View("Login");
         }
         
         public IActionResult AddListingPage()
@@ -323,7 +325,7 @@ namespace ANotSoTypicalMarketplace.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string email, string password)
+        public async Task<IActionResult> Login(User user)
         {
             List<User> userList = new List<User>();
             using (HttpClient httpClient = new HttpClient())
@@ -339,23 +341,27 @@ namespace ANotSoTypicalMarketplace.Controllers
                 }
             }
 
-            if (userList.Any(u => u.UserEmail == email))
+            if (userList.Any(u => u.UserEmail == user.UserEmail))
             {
-                if (userList.Any(u => u.Password == password))
+                if (userList.Any(u => u.Password == user.Password))
                 {
-                    var e = userList.Find(u => u.UserEmail == email);
+                    var e = userList.Find(u => u.UserEmail == user.UserEmail);
                     IsLoggedIn = true;
                     ViewData["UserName"] = e.UserName;
-                    return View("Index");
+                    return RedirectToAction("Index");
+                    
                 }
                 else
                 {
                     return View();
+                    //return StatusCode(500);
                 }
             }
             else
             {
                 return View();
+                //return StatusCode(500);
+               
             }
 
 

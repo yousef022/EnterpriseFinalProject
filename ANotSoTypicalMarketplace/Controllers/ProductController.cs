@@ -27,7 +27,7 @@ namespace ANotSoTypicalMarketplace.Controllers
         {
             var p = new Product
             {
-                Id = product.Id,
+                //Id = product.Id,
                 Name = product.Name,
                 Description = product.Description,
                 Stock = product.Stock,
