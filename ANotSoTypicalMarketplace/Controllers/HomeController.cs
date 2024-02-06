@@ -373,6 +373,12 @@ namespace ANotSoTypicalMarketplace.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
+            if (!ModelState.IsValid)
+            {
+                // The model state is invalid, return to the form with the current user model to display validation errors
+                return View("SignUp", user);
+            }
+
             User userList= new User();
             using (HttpClient httpClient = new HttpClient())
             {
