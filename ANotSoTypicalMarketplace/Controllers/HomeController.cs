@@ -61,6 +61,12 @@ namespace ANotSoTypicalMarketplace.Controllers
         [HttpPost]
         public async Task<IActionResult> AddProduct(Product product)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return View("AddListing",product);
+            }
+
             Product productList = new Product();
             using (HttpClient httpClient = new HttpClient())
             {

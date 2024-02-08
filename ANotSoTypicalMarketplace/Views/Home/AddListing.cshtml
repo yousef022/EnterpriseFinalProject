@@ -1,5 +1,10 @@
-﻿@model IEnumerable<ANotSoTypicalMarketplace.Models.Product>
+﻿@model ANotSoTypicalMarketplace.Models.Product
 
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger" asp-validation-summary="All">Please fix the following errors:</div>
+}
 
 <div class="container">
 
