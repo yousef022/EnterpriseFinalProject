@@ -1,4 +1,5 @@
 ﻿using ANotSoTypicalMarketplace.Models;
+using ANotSoTypicalMarketplace.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -324,52 +325,43 @@ namespace ANotSoTypicalMarketplace.Controllers
             return RedirectToAction("Index");
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> Login(User user)
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                // If model state is not valid, return the same view to show validation errors
+                return View("Login",loginViewModel);
+            }
+
             List<User> userList = new List<User>();
             using (HttpClient httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync(
-                    "http://localhost:5001/api/user"))
+                using (var response = await httpClient.GetAsync("http://localhost:5001/api/user"))
                 {
-                    string apiResponse = await
-                                   response.Content.ReadAsStringAsync();
-
-                    userList = JsonConvert.
-                        DeserializeObject<List<User>>(apiResponse);
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    userList = JsonConvert.DeserializeObject<List<User>>(apiResponse);
                 }
             }
 
-            if (userList.Any(u => u.UserEmail == user.UserEmail))
+            var user = userList.FirstOrDefault(u => u.UserEmail == loginViewModel.Email);
+
+            if (user != null && user.Password == loginViewModel.Password) // You should check the hashed password here
             {
-                if (userList.Any(u => u.Password == user.Password))
-                {
-                    var e = userList.Find(u => u.UserEmail == user.UserEmail);
-                    IsLoggedIn = true;
-                    ViewData["UserName"] = e.UserName;
-                    return RedirectToAction("Index");
-                    
-                }
-                else
-                {
-                    return View();
-                    //return StatusCode(500);
-                }
+                // User is found and password matches
+                IsLoggedIn = true; // Make sure this is actually managed in your session or authentication mechanism
+                ViewData["UserName"] = user.UserName;
+                return RedirectToAction("Index");
             }
             else
             {
-                return View();
-                //return StatusCode(500);
-               
+                // User is not found or password does not match
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return View(loginViewModel);
             }
-
-
-            
-
         }
-
-
+ 
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
