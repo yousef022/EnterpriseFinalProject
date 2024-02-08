@@ -1,56 +1,93 @@
 ﻿@model IEnumerable<ANotSoTypicalMarketplace.Models.Product>
 
-<h2>Add a Product</h2>
 
-<form asp-action="AddProduct" method="post">
-    <div class="form-group">
-        <label for="Id">ID: </label>
-        <input class="form-control" name="Id" />
+<div class="container">
+
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h2>Add a Product</h2>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label for="Name">Name: </label>
-        <input class="form-control" name="Name" />
-    </div>
+    </br>
 
-    <div class="form-group">
-        <label for="Description">Description: </label>
-        <input class="form-control" name="Description" />
-    </div>
 
-    <div class="form-group">
-        <label for="Stock">Quantity: </label>
-        <input class="form-control" name="Stock" />
-    </div>
+    <form asp-action="AddProduct" method="post">
 
-    <div class="form-group">
-        <label for="Price">Price: </label>
-        <input class="form-control" name="Price" />
-    </div>
+        <!--First Row-->
+        <div class="row justify-content-center">
+            <div class="form-group col-md-3">
+                <label for="Id">ID </label>
+                <input class="form-control" name="Id" />
+            </div>
 
-    <div class="form-group">
-        <label for="ShippingFee">ShippingFee: </label>
-        <input class="form-control" name="ShippingFee" />
-    </div>
+            <div class="form-group col-md-3">
+                <label for="CategoryId">Category ID </label>
+                <input class="form-control" name="CategoryId" />
+            </div>
 
-    <div class="form-group">
-        <label for="CategoryId">Category Id: </label>
-        <input class="form-control" name="CategoryId" />
-    </div>
+            <div class="form-group col-md-4">
+                <label for="Name">Name </label>
+                <input class="form-control" name="Name" />
+            </div>
+        </div>
 
-    <div class="form-group">
-        <label for="IsUsed">Is Used: </label>
-        <input class="form-control" name="IsUsed" type="checkbox" value="true"/>
-    </div>
+        </br>
 
-    <div class="form-group">
-        <label for="CanReturn">Can Return: </label>
-        <input class="form-control" name="CanReturn" type="checkbox" value="true" />
-    </div>
+        <!--Second Row-->
+        <div class="row justify-content-center">
+            <div class="form-group col-md-3">
+                <label for="Stock">Quantity </label>
+                <input class="form-control" name="Stock" />
+            </div>
 
-    <div class="text-center panel-body">
-        <button type="submit" class=" btn btn-primary">Add Product</button>
-    </div>
+            <div class="form-group col-md-3">
+                <label for="Price">Price </label>
+                <input class="form-control" name="Price" />
+            </div>
 
-</form>
+            <div class="form-group col-md-4">
+                <label for="ShippingFee">Shipping Fee </label>
+                <input class="form-control" name="ShippingFee" />
+            </div>
+        </div>
 
+
+        </br>
+
+        <!--Description-->
+        <div class="row justify-content-center">
+            <div class="form-group col-md-10 ">
+                <label for="Description">Description </label>
+                <textarea class="form-control" name="Description" rows="10"></textarea>
+            </div>
+        </div>
+
+        </br>
+
+        <!--CheckBoxes-->
+        <div class="row justify-content-center">
+            <div class="form-group col-md-10">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="IsUsed" id="IsUsed" value="true" />
+                    <label class="form-check-label" for="IsUsed">Used</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="CanReturn" id="CanReturn" value="true" />
+                    <label class="form-check-label" for="CanReturn">Can Return</label>
+                </div>
+            </div>
+        </div>
+
+        </br>
+
+        <!--Add Product Button-->
+        <div class="row justify-content-center">
+            <div class="text-center panel-body">
+                <button type="submit" class=" btn btn-primary">Add Product</button>
+            </div>
+        </div>
+
+
+    </form>
+</div>
