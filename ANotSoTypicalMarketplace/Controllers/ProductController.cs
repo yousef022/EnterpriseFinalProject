@@ -18,82 +18,110 @@ namespace ANotSoTypicalMarketplace.Controllers
             _context = context;
         }
 
+
+        //GET endpoint
         [HttpGet]
         public IEnumerable<Product> Get() => _context.Products.ToList();
 
-        //Adding a product
+
+        //POST endpoint
         [HttpPost]
-        public Product Post([FromBody] Product product)
+        public ActionResult<Product> Post([FromBody] Product product)
         {
-            var p = new Product
+            try
             {
-                //Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-                Stock = product.Stock,
-                Price = product.Price,
-                ShippingFee= product.ShippingFee,
-                IsUsed= product.IsUsed,
-                CanReturn = product.CanReturn,
-                CategoryId = product.CategoryId
-            };
+                var p = new Product
+                {   
+                    Name = product.Name,
+                    ShippingFee = product.ShippingFee,  
+                    Price = product.Price,
+                    Description = product.Description,
+                    Stock = product.Stock,
+                    IsUsed = product.IsUsed,
+                    CanReturn = product.CanReturn
+                };
 
-            _context.Products.Add(p);
-            _context.SaveChanges();
-
-            return product;
-        }
-
-        //Updating a product
-        [HttpPut]
-        public Product Put([FromBody] Product product)
-        {
-
-            var prod = _context.Products.First(p => p.Id == product.Id);
-
-            prod.Name = product.Name;
-            prod.Description = product.Description;
-            prod.Stock = product.Stock;
-            prod.Price = product.Price;
-            prod.ShippingFee= product.ShippingFee;
-            prod.IsUsed = product.IsUsed;
-            prod.CanReturn= product.CanReturn;
-            prod.CategoryId = product.CategoryId;
-
-            _context.SaveChanges();
-
-            return product;
-        }
-
-        //Deleting Product
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-            var prod = _context.Products.First(p => p.Id == id);
-            _context.Remove(prod);
-            _context.SaveChanges();
-
-        }
-        
-        //Patching product
-        [HttpPatch("{id}")]
-        public StatusCodeResult Patch(int id, [FromBody] JsonPatchDocument<Product> prodPatch)
-        {
-
-            var prod = (Product)_context.Products.First(p => p.Id == id);
-            if (prod != null)
-            {
-                prodPatch.ApplyTo(prod);
+                _context.Products.Add(p);
                 _context.SaveChanges();
-                return Ok();
+
+                return p;
             }
-            return NotFound();
+            catch (Exception) 
+            {
+                return NotFound();
+            }
         }
 
 
-        
+        //PUT endpoint
+        [HttpPut]
+        public ActionResult<Product> Put([FromBody] Product product)
+        {
+            try
+            {
+                var prod = _context.Products.FirstOrDefault(p => p.Id == product.Id);
 
+                prod.Name = product.Name;
+                prod.ShippingFee = product.ShippingFee;
+                prod.Price = product.Price;
+                prod.Description = product.Description;
+                prod.Stock = product.Stock;
+                prod.IsUsed = product.IsUsed;
+                prod.CanReturn = product.CanReturn;
 
+                _context.SaveChanges();
+
+                return product;
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        //DELETE endpoint
+        [HttpDelete("{id}")]
+        public ActionResult<Product> Delete(int id) 
+        {
+            try
+            {
+                var prod = _context.Products.First(p => p.Id == id);
+                _context.Remove(prod);
+                _context.SaveChanges();
+                return Ok(prod);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        //PATCH endpoint
+        [HttpPatch("{id}")]
+        public ActionResult<Product> Patch(int id, [FromBody] JsonPatchDocument<Product> prodPatch)
+        {
+            try
+            {
+                var prod = _context.Products.First(p => p.Id == id);
+                if (prod != null)
+                {
+                    prodPatch.ApplyTo(prod);
+                    _context.SaveChanges();
+                    return Ok(prod);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception)
+            {
+
+                return BadRequest();
+            }
+
+            
+        }
 
     }
 }

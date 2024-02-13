@@ -16,10 +16,10 @@
         @foreach (var item in Model)
         {
             <tr>
+               
                 <td>@item.Id</td>
                 <td>@item.Name</td>
                 <td>@item.Price</td>
-                <td>@item.CategoryId</td>
                 <td><a class="btn btn-primary" asp-action="PriceMatch" asp-route-id="@item.Id" asp-route-name="@item.Name" asp-route-price="@item.Price">
                         <span class="material-symbols-outlined">
                             sell

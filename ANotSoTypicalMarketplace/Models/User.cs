@@ -30,8 +30,10 @@ namespace ANotSoTypicalMarketplace.Models
         [Required]
         public bool IsBanned { get; set; }
 
-        
-        [AllowNull]
-        public List<Product>? Products { get; set; }
+        // Navigation property for Cart. Each user has one Cart.
+        public virtual Cart? Cart { get; set; }
+
+        //[AllowNull]
+        //public List<Product>? Products { get; set; }
     }
 }

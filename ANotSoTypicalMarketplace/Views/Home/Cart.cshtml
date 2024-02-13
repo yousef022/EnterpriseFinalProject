@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ANotSoTypicalMarketplace.Models.Cart>
+﻿@* @model IEnumerable<ANotSoTypicalMarketplace.Models.Cart>
 
 <table class="table table-bordered table-striped m-2">
     <thead>
@@ -13,8 +13,8 @@
     <tbody>
         @foreach (var item in Model)
         {
-                    <tr>
-                        <td>@item.Id</td>
+            <tr>
+                    <td>@item.Id</td>
                 @foreach(var cItem in item.CartItems)
                 {
                     <td>@cItem.Name</td>
@@ -26,4 +26,47 @@
             </tr>
         }
     </tbody>
+</table> *@
+@model Cart
+
+@{
+    ViewData["Title"] = "Your Shopping Cart";
+    int totalItems = 0;
+}
+
+<h2>Your Shopping Cart</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Total</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CartItems)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Product.Name</td>
+                <td>@item.Product.Price.ToString("C")</td>
+                <td>
+                    @* Remove form for cart item *@
+                    <form asp-action="DeleteFromCart" method="post">
+                        <input type="hidden" name="cartItemId" value="@item.Id" />
+                        <input type="submit" value="Remove" class="btn btn-danger" />
+                    </form>
+                </td>
+            </tr>
+
+            totalItems++;
+        }
+    </tbody>
 </table>
+
+@* Add a checkout button or link *@
+<a asp-action="Checkout" class="btn btn-success">Proceed to Checkout</a>
+

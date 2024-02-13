@@ -1,5 +1,7 @@
 ﻿using ANotSoTypicalMarketplace.Models;
+using ANotSoTypicalMarketplace.Services;
 using ANotSoTypicalMarketplace.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -12,6 +14,7 @@ namespace ANotSoTypicalMarketplace.Controllers
     {
         private readonly Database _context;
         private static bool _isLoggedIn;
+        private static CurrentUserViewModel currentUser = new CurrentUserViewModel();
         private bool IsLoggedIn { get => _isLoggedIn; set => _isLoggedIn = value; }
         //static User _user = new User();
 
@@ -186,88 +189,245 @@ namespace ANotSoTypicalMarketplace.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Cart()
+        //GET api/cart
+        public async Task<IActionResult> GetCartItems()
         {
-            List<Cart> cartList = new List<Cart>();
-
-            using (HttpClient httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync("http://localhost:5001/api/cart"))
-                {
-                    string apiResponse = await
-                                    response.Content.ReadAsStringAsync();
-
-                    cartList = JsonConvert.
-                        DeserializeObject<List<Cart>>(apiResponse);
-                }
-            }
-            return View(cartList);
-        }
-
-        
-        public async Task<IActionResult> AddToCart(int productId)
-        {
-            Cart cartList = new Cart();
-            using(HttpClient httpClient = new HttpClient())
-            {
-                var response = await httpClient.PostAsync("http://localhost:5001/api/cart/" + productId, null);
-               
-            }
-            return RedirectToAction("Index");
-        }
-
-        public async Task<IActionResult> SellProductFromCart(int id, int stock)
-        {
-            Product product = new Product();
-            //var newStock = stock - 1;
+            //List<CartItem> cartItems = new List<CartItem>();
+            Cart cart = new Cart();
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync("http://localhost:5001/api/product" + id))
+                using (var response = await httpClient.GetAsync($"http://localhost:5001/api/cart/{currentUser.UserId}"))
                 {
-                    string apiRes = response.Content.ReadAsStringAsync().Result;
-                    ViewData["id"] = id;
-                    ViewData["stock"] = stock;
-                    ViewData["maxStockCart"] = stock;
-
-                    product = JsonConvert.DeserializeObject<Product>(apiRes);
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    //cartItems = JsonConvert.DeserializeObject<List<CartItem>>(apiResponse);
+                    cart = JsonConvert.DeserializeObject<Cart>(apiResponse);
 
                 }
             }
-            return View("SaleConfirmCart", product);
+            //return View(cartItems);
+            return View("Cart",cart);
+
+
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SellProductFromCart(int id, Product product)
+        //POST api/cart
+        public async Task<IActionResult> AddToCart( int productId)
         {
+            CartItem cartItem = new CartItem();
             using (var httpClient = new HttpClient())
             {
-                var request = new HttpRequestMessage
+                var addToCartDto = new { currentUser.UserId, ProductId = productId };
+                StringContent content = new StringContent(JsonConvert.SerializeObject(addToCartDto), Encoding.UTF8, "application/json");
+
+                using (var response = await httpClient.PostAsync("http://localhost:5001/api/cart", content))
                 {
-                    RequestUri = new Uri("http://localhost:5001/api/product/" + id),
-                    Method = new HttpMethod("Patch"),
-                    Content = new StringContent("[{ \"op\": \"replace\", \"path\": \"Stock\",\"value\": \"" + product.Stock + "\"}]",
-                    Encoding.UTF8, "application/json")
-                };
-
-                var response = await httpClient.SendAsync(request);
-
-            }
-
-            await DeleteFromCart(id);
-            return RedirectToAction("Index");
-        }
-
-        public async Task<IActionResult> DeleteFromCart(int id)
-        {
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.DeleteAsync("http://localhost:5001/api/cart/" + id.ToString()))
-                {
-                    string apiRes = await response.Content.ReadAsStringAsync();
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    cartItem = JsonConvert.DeserializeObject<CartItem>(apiResponse);
                 }
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index"); // or return View() depending on your flow
         }
+
+        //PUT api/cart
+        public async Task<IActionResult> UpdateCartItem(CartItem cartItemToUpdate)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var content = new StringContent(JsonConvert.SerializeObject(cartItemToUpdate), Encoding.UTF8, "application/json");
+                using (var response = await httpClient.PutAsync("http://localhost:5001/api/cart", content))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    // Handle the response, maybe checking for success status code
+                }
+            }
+            return RedirectToAction("GetCartItems");
+        }
+
+        //DELETE api/cart
+        public async Task<IActionResult> DeleteFromCart(int cartItemId)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.DeleteAsync($"http://localhost:5001/api/cart/{cartItemId}"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    // Handle the response
+                }
+            }
+            return RedirectToAction("GetCartItems");
+        }
+
+        //Buy all items in cart
+        /*public async Task<IActionResult> Checkout()
+        {
+
+        }*/
+
+
+
+
+
+
+
+
+
+
+        //GET
+        //public async Task<IActionResult> Cart()
+        //{
+        //    List<CartItem> cartItemList = new List<CartItem>();
+
+        //    using (HttpClient httpClient = new HttpClient())
+        //    {
+        //        // Assuming you have an endpoint that gets the cart items for the current user
+        //        // The URL might include a user identifier if needed, e.g. /api/cart/{userId}
+        //        using (var response = await httpClient.GetAsync("http://localhost:5001/api/cart"))
+        //        {
+        //            if (response.IsSuccessStatusCode)
+        //            {
+        //                string apiResponse = await response.Content.ReadAsStringAsync();
+        //                cartItemList = JsonConvert.DeserializeObject<List<CartItem>>(apiResponse);
+        //            }
+        //            else
+        //            {
+        //                // Handle the case where the API call was not successful
+        //                // You might want to log the error or set a ViewBag property to show an error message
+        //            }
+        //        }
+        //    }
+
+        //    // Assuming your View expects a list of CartItem objects
+        //    return View(cartItemList);
+        //}
+
+        //POST
+        //public async Task<IActionResult> AddToCart(int productId)
+        //{
+        //    using (HttpClient httpClient = new HttpClient())
+        //    {
+        //        // Assuming your API is set up to take productId as a query parameter
+        //        var response = await httpClient.PostAsync($"http://localhost:5001/api/cart?productId={productId}", null);
+        //        // Handle response here. e.g., check if it's successful and act accordingly
+        //    }
+        //    return RedirectToAction("Index");
+        //}
+
+        //// This method might need clarification, but assuming it confirms the sale of a product
+        //public async Task<IActionResult> SellProductFromCart(int id, int stock)
+        //{
+        //    Product product = new Product();
+        //    using (var httpClient = new HttpClient())
+        //    {
+        //        using (var response = await httpClient.GetAsync("http://localhost:5001/api/product" + id))
+        //        {
+        //            string apiRes = response.Content.ReadAsStringAsync().Result;
+        //            ViewData["id"] = id;
+        //            ViewData["stock"] = stock;
+        //            ViewData["maxStockCart"] = stock;
+
+        //            product = JsonConvert.DeserializeObject<Product>(apiRes);
+
+        //        }
+        //    }
+        //    return View("SaleConfirmCart", product);
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> SellProductFromCart(int id, Product product)
+        //{
+        //    using (var httpClient = new HttpClient())
+        //    {
+        //        var request = new HttpRequestMessage
+        //        {
+        //            RequestUri = new Uri("http://localhost:5001/api/product/" + id),
+        //            Method = new HttpMethod("Patch"),
+        //            Content = new StringContent("[{ \"op\": \"replace\", \"path\": \"Stock\",\"value\": \"" + product.Stock + "\"}]",
+        //            Encoding.UTF8, "application/json")
+        //        };
+
+        //        var response = await httpClient.SendAsync(request);
+
+        //    }
+        //    await DeleteFromCart((int)product.CartId); // Assuming product has CartItemId property after sale is confirmed
+        //    return RedirectToAction("Index");
+        //}
+
+        //// Assuming id is the CartItem's id and not the product's id
+        //public async Task<IActionResult> DeleteFromCart(int cartItemId)
+        //{
+        //    using (var httpClient = new HttpClient())
+        //    {
+        //        var response = await httpClient.DeleteAsync($"http://localhost:5001/api/cartitems/{cartItemId}");
+        //        // Handle response here, e.g., ensure it was successful
+        //    }
+        //    return RedirectToAction("Index");
+        //}
+
+
+
+
+        //public async Task<IActionResult> AddToCart(int productId)
+        //{
+        //    Cart cartList = new Cart();
+        //    using(HttpClient httpClient = new HttpClient())
+        //    {
+        //        var response = await httpClient.PostAsync("http://localhost:5001/api/cart/" + productId, null);
+
+        //    }
+        //    return RedirectToAction("Index");
+        //}
+
+        //public async Task<IActionResult> SellProductFromCart(int id, int stock)
+        //{
+        //    Product product = new Product();
+        //    using (var httpClient = new HttpClient())
+        //    {
+        //        using (var response = await httpClient.GetAsync("http://localhost:5001/api/product" + id))
+        //        {
+        //            string apiRes = response.Content.ReadAsStringAsync().Result;
+        //            ViewData["id"] = id;
+        //            ViewData["stock"] = stock;
+        //            ViewData["maxStockCart"] = stock;
+
+        //            product = JsonConvert.DeserializeObject<Product>(apiRes);
+
+        //        }
+        //    }
+        //    return View("SaleConfirmCart", product);
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> SellProductFromCart(int id, Product product)
+        //{
+        //    using (var httpClient = new HttpClient())
+        //    {
+        //        var request = new HttpRequestMessage
+        //        {
+        //            RequestUri = new Uri("http://localhost:5001/api/product/" + id),
+        //            Method = new HttpMethod("Patch"),
+        //            Content = new StringContent("[{ \"op\": \"replace\", \"path\": \"Stock\",\"value\": \"" + product.Stock + "\"}]",
+        //            Encoding.UTF8, "application/json")
+        //        };
+
+        //        var response = await httpClient.SendAsync(request);
+
+        //    }
+
+        //    await DeleteFromCart(id);
+        //    return RedirectToAction("Index");
+        //}
+
+        //public async Task<IActionResult> DeleteFromCart(int id)
+        //{
+        //    using (var httpClient = new HttpClient())
+        //    {
+        //        using (var response = await httpClient.DeleteAsync("http://localhost:5001/api/cart/" + id.ToString()))
+        //        {
+        //            string apiRes = await response.Content.ReadAsStringAsync();
+        //        }
+        //    }
+        //    return RedirectToAction("Index");
+        //}
 
         public async Task<IActionResult> PriceMatch(int id, string name, double price)
         {
@@ -331,7 +491,7 @@ namespace ANotSoTypicalMarketplace.Controllers
             return RedirectToAction("Index");
         }
 
-
+        //Login the user
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
@@ -352,12 +512,19 @@ namespace ANotSoTypicalMarketplace.Controllers
             }
 
             var user = userList.FirstOrDefault(u => u.UserEmail == loginViewModel.Email);
+            var storedUser = _context.Users.First(su => su.UserEmail == loginViewModel.Email);
 
-            if (user != null && user.Password == loginViewModel.Password) // You should check the hashed password here
+            // Password hasher
+            var passwordHasher = new PasswordHasher();
+           
+            if (user != null && passwordHasher.VerifyHashedPassword(storedUser, storedUser.Password, loginViewModel.Password) == PasswordVerificationResult.Success) // You should check the hashed password here
             {
                 // User is found and password matches
+                
+                currentUser.UserId = storedUser.Id;
                 IsLoggedIn = true; // Make sure this is actually managed in your session or authentication mechanism
-                ViewData["UserName"] = user.UserName;
+                //ViewData["UserName"] = user.UserName;
+                
                 return RedirectToAction("Index");
             }
             else
@@ -367,7 +534,8 @@ namespace ANotSoTypicalMarketplace.Controllers
                 return View(loginViewModel);
             }
         }
- 
+        
+        //Signup the user
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
