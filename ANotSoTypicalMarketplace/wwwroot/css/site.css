@@ -1,22 +1,69 @@
-html {
-  font-size: 14px;
-}
+/* Elements */
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
+    html {
+      font-size: 14px;
+    }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
+    @media (min-width: 768px) {
+      html {
+        font-size: 16px;
+      }
+    }
 
-body {
-  margin-bottom: 60px;
-}
+    html {
+      position: relative;
+      min-height: 100%;
+    }
 
-textarea {
-    resize: none;
-}
+    body {
+      margin-bottom: 60px;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    label {
+        margin-bottom: 10px; 
+    }
+
+
+    
+ /* Form */
+    
+    .transparent-form {
+        background: rgba(255, 255, 255, 0.30); /* White background with 50% opacity */
+        padding: 25px;
+        border-radius: 20px;
+    }
+
+    .form-rounded {
+        border-radius: 0.5rem;
+    }
+
+/* Scrollbar */
+
+    /* Customizes the scrollbar for webkit browsers (Chrome, Safari, etc.) */
+
+        ::-webkit-scrollbar {
+            width: 6px; /* Adjust the width of the scrollbar */
+            height: 6px; /* Adjust the height of the horizontal scrollbar */
+        }
+
+        /* Style for the scrollbar track */
+        ::-webkit-scrollbar-track {
+            background: transparent; /* Makes the track background transparent */
+        }
+
+        /* Style for the scrollbar thumb (the draggable part) */
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1; /* Darker grey for the thumb */
+            border-radius: 4px; /* Rounded corners on the thumb */
+        }
+
+        /* Style for the scrollbar thumb when hovered or clicked */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8; /* Slightly darker grey on hover */
+        }
+
+

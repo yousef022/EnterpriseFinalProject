@@ -245,18 +245,41 @@ namespace ANotSoTypicalMarketplace.Controllers
         }
 
         //DELETE api/cart
+        //public async Task<IActionResult> DeleteFromCart(int cartItemId)
+        //{
+        //    using (var httpClient = new HttpClient())
+        //    {
+        //        using (var response = await httpClient.DeleteAsync($"http://localhost:5001/api/cart/{cartItemId}"))
+        //        {
+        //            string apiResponse = await response.Content.ReadAsStringAsync();
+        //            // Handle the response
+        //        }
+        //    }
+        //    return RedirectToAction("GetCartItems");
+        //}
+
+        // DELETE api/cart
         public async Task<IActionResult> DeleteFromCart(int cartItemId)
         {
             using (var httpClient = new HttpClient())
             {
                 using (var response = await httpClient.DeleteAsync($"http://localhost:5001/api/cart/{cartItemId}"))
                 {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    // Handle the response
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // If the API call is successful
+                        return Json(new { success = true, message = "Item deleted successfully" });
+                    }
+                    else
+                    {
+                        // If the API call failed
+                        return Json(new { success = false, message = "Error deleting item" });
+                    }
                 }
             }
-            return RedirectToAction("GetCartItems");
         }
+
+
 
         //Buy all items in cart
         [HttpPost]
