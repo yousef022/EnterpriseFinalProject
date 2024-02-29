@@ -32,7 +32,7 @@
  /* Form */
     
     .transparent-form {
-        background: rgba(255, 255, 255, 0.30); /* White background with 50% opacity */
+        background: rgba(255, 255, 255, 0.30);  /*White background with 50% opacity */
         padding: 25px;
         border-radius: 20px;
     }
@@ -40,6 +40,20 @@
     .form-rounded {
         border-radius: 0.5rem;
     }
+
+    /* Horizontal line */
+    .divider {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        border: 0;
+        opacity: 0.35; 
+        border-top: 1px solid rgba(50,251,226);
+    }
+  
+    
+
+/* Add or remove styles as needed to match your site's design */
+
 
 /* Scrollbar */
 
@@ -66,4 +80,10 @@
             background: #a8a8a8; /* Slightly darker grey on hover */
         }
 
+
+
+html,
+body {
+    height: 100%
+}
 

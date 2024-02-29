@@ -7,51 +7,67 @@
     <div class="alert alert-danger" asp-validation-summary="All"></div>
 }
 
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <form asp-action="CreateUser" method="post">
 
-<form asp-action="CreateUser" method="post">
 
-    <fieldset class="transparent-form">
-        <legend class="mb-4">Sign Up</legend>
-        <div class="form-group">
-            <label asp-for="UserName">Username</label>
-            <input asp-for="UserName" type="text" class="form-control form-rounded" placeholder="name@example.com">
+                <fieldset class="transparent-form">
+                    <div class="m-2">
+                        <legend class="mb-4">Sign Up</legend>
+                        <div class="form-group">
+                            <label asp-for="UserName">Username</label>
+                            <input asp-for="UserName" type="text" class="form-control form-rounded" placeholder="name@example.com">
+                        </div>
+
+                        <br>
+                        <div class="form-group">
+                            <label asp-for="FullName">Full name</label>
+                            <input asp-for="FullName" type="text" class="form-control form-rounded">
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label asp-for="UserEmail">Email</label>
+                            <input asp-for="UserEmail" type="text" class="form-control form-rounded">
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label asp-for="Password">Password</label>
+                            <input asp-for="Password" type="password" class="form-control form-rounded">
+                            <div id="passwordHelpBlock" class="form-text">
+                                Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label asp-for="PhoneNumber">Phone number</label>
+                            <input asp-for="PhoneNumber" type="text" class="form-control form-rounded" placeholder="123-456-7890">
+                        </div>
+                        <br>
+                        <div class="button-signup">
+                            <button type="submit" class="btn btn-primary">Sign up</button>
+                        </div>
+
+                        <hr class="divider" />
+
+                        <div class="form-group mt-2">
+                            <label asp-for="UserEmail">Do you want to</label>
+                            <a asp-action="GoToLogin">Login?</a>
+
+                        </div>
+
+                    </div>
+
+
+
+                </fieldset>
+
+
+
+            </form>
         </div>
-
-        <br>
-        <div class="form-group">
-            <label asp-for="FullName">Full name</label>
-            <input asp-for="FullName" type="text" class="form-control form-rounded">
-        </div>
-        <br>
-        <div class="form-group">
-            <label asp-for="UserEmail">Email</label>
-            <input asp-for="UserEmail" type="text" class="form-control form-rounded">
-        </div>
-        <br>
-        <div class="form-group">
-            <label asp-for="Password">Password</label>
-            <input asp-for="Password" type="password" class="form-control form-rounded">
-            <div id="passwordHelpBlock" class="form-text">
-                Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
-            </div>
-        </div>
-        <br>
-        <div class="form-group">
-            <label asp-for="PhoneNumber">Phone number</label>
-            <input asp-for="PhoneNumber" type="text" class="form-control form-rounded" placeholder="123-456-7890">
-        </div>
-        <br>
-        <div class="button-signup">
-            <button type="submit" class="btn btn-primary">Sign up</button>
-        </div>
-    </fieldset>
-
-</form>
-
- <br>
-
-<div class="form-group">
-    <label asp-for="UserEmail">Do you want to</label>
-    <a asp-action="GoToLogin">Login?</a>
-
+    </div>
 </div>
+
+

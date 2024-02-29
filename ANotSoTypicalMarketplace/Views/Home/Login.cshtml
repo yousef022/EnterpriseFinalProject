@@ -1,25 +1,42 @@
 ﻿@model ANotSoTypicalMarketplace.ViewModels.LoginViewModel
 
-<h1>Login Page</h1>
-<br>
+<br/>
+<br/>
+<br/>
 
 @if (!ViewData.ModelState.IsValid)
 {
     <div class="alert alert-danger" asp-validation-summary="All">Please fix the following errors:</div>
 }
 
-<form asp-action="Login" method="post">
 
-    <div class="form-group">
-        <label asp-for="Email">Email:</label>
-        <input asp-for="Email" type="text" class="form-control">
-    </div>
-    <br>
-    <div class="form-group">
-        <label asp-for="Password">Password:</label>
-        <input asp-for="Password" type="password" class="form-control">
-    </div>
-    <br>
-    <button type="submit" class="btn btn-primary">Login</button>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <form asp-action="Login" method="post">
 
-</form>
+                <fieldset class="transparent-form">
+                    <div class="m-2">
+                        <legend class="mb-4"> Login </legend>
+
+                        <div class="form-group">
+                            <label asp-for="Email">Email:</label>
+                            <input asp-for="Email" type="text" class="form-control form-rounded">
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label asp-for="Password">Password:</label>
+                            <input asp-for="Password" type="password" class="form-control form-rounded">
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-primary">Login</button>
+
+                    </div>
+
+                </fieldset>
+
+            </form>
+        </div>
+    </div>
+</div>
+
